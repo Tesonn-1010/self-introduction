@@ -142,6 +142,73 @@
         max-height: 300px;
       }
 
+      /* Loading screen */
+      #loader {
+        position: fixed;
+        inset: 0;
+        background: #0f0b08;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+      }
+      #loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+      .loader-name {
+        font-size: 4rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        background: linear-gradient(270deg, #d6c3a5, #f5f1ea, #a89070, #d6c3a5);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 3s ease infinite;
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      .loader-name.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .loader-sub {
+        font-size: 0.7rem;
+        letter-spacing: 0.4em;
+        color: rgba(255,255,255,0.3);
+        text-transform: uppercase;
+        margin-top: 1rem;
+        opacity: 0;
+        transition: opacity 0.6s ease 0.3s;
+      }
+      .loader-sub.show {
+        opacity: 1;
+      }
+      .loader-bar-wrap {
+        width: 120px;
+        height: 1px;
+        background: rgba(255,255,255,0.1);
+        margin-top: 2.5rem;
+        border-radius: 999px;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.4s ease 0.4s;
+      }
+      .loader-bar-wrap.show {
+        opacity: 1;
+      }
+      .loader-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(to right, #d6c3a5, #f5f1ea);
+        border-radius: 999px;
+        transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
       /* Timeline */
       .timeline-item::before {
         content: '';
@@ -155,6 +222,15 @@
     </style>
   </head>
   <body class="bg-[#0f0b08] text-[#f5f1ea] overflow-x-hidden">
+
+    <!-- Loading Screen -->
+    <div id="loader">
+      <img src="logo.png" alt="logo" id="loaderLogo" style="width:140px; opacity:0; transform:scale(0.85); transition: opacity 0.6s ease, transform 0.6s ease;" />
+      <p class="loader-sub" id="loaderSub" style="margin-top:1.2rem;">SELF-INTRODUCTION</p>
+      <div class="loader-bar-wrap" id="loaderBarWrap">
+        <div class="loader-bar" id="loaderBar"></div>
+      </div>
+    </div>
 
     <!-- Background orbs -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden">
@@ -601,6 +677,31 @@
     </div>
 
     <script>
+      // ===== Loading Screen =====
+      const loaderLogo = document.getElementById('loaderLogo');
+      const loaderSub = document.getElementById('loaderSub');
+      const loaderBarWrap = document.getElementById('loaderBarWrap');
+      const loaderBar = document.getElementById('loaderBar');
+      const loader = document.getElementById('loader');
+
+      document.body.style.overflow = 'hidden';
+
+      setTimeout(() => {
+        loaderLogo.style.opacity = '1';
+        loaderLogo.style.transform = 'scale(1)';
+        loaderSub.classList.add('show');
+        loaderBarWrap.classList.add('show');
+      }, 100);
+
+      setTimeout(() => {
+        loaderBar.style.width = '100%';
+      }, 200);
+
+      setTimeout(() => {
+        loader.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 2000);
+
       // ===== Typing Animation =====
       const text = 'ケーノ';
       let i = 0;
