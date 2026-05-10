@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>藤井勇士ポートフォリオ | ケーノ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap");
+
+      * { font-family: "Noto Sans JP", sans-serif; }
+
+      html { scroll-behavior: smooth; }
+
+      /* Scroll reveal */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-left {
+        opacity: 0;
+        transform: translateX(-40px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+      .reveal-left.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .reveal-right {
+        opacity: 0;
+        transform: translateX(40px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+      .reveal-right.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* Typing cursor */
+      .typing-cursor::after {
+        content: '|';
+        animation: blink 0.7s infinite;
+        color: #d6c3a5;
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+
+      /* Hero gradient animation */
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      .gradient-text {
+        background: linear-gradient(270deg, #d6c3a5, #f5f1ea, #a89070, #d6c3a5);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradientShift 6s ease infinite;
+      }
+
+      /* Skill bar */
+      .skill-bar-fill {
+        width: 0%;
+        transition: width 1.2s ease;
+      }
+
+      /* Modal */
+      .modal-hidden { display: none; }
+      .modal-visible { display: flex; }
+
+      /* Hobby card */
+      .hobby-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+      .hobby-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+      .hobby-card .card-img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease, opacity 0.3s ease;
+        opacity: 0.75;
+      }
+      .hobby-card:hover .card-img { transform: scale(1.05); opacity: 1; }
+
+      /* Nav active */
+      nav a.active { color: white; }
+
+      /* Floating orbs */
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+      }
+      .orb { animation: float 8s ease-in-out infinite; }
+      .orb-2 { animation: float 12s ease-in-out infinite reverse; }
+
+      /* Works card */
+      .work-card {
+        transition: all 0.3s ease;
+      }
+      .work-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(214, 195, 165, 0.4);
+      }
+
+      /* Hamburger */
+      .hamburger-line {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: white;
+        transition: all 0.3s ease;
+      }
+      .hamburger.open .hamburger-line:nth-child(1) {
+        transform: translateY(6px) rotate(45deg);
+      }
+      .hamburger.open .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.open .hamburger-line:nth-child(3) {
+        transform: translateY(-6px) rotate(-45deg);
+      }
+
+      /* Mobile menu */
+      #mobileMenu {
+        transition: all 0.3s ease;
+        max-height: 0;
+        overflow: hidden;
+      }
+      #mobileMenu.open {
+        max-height: 300px;
+      }
+
+      /* Timeline */
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -1px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, rgba(214,195,165,0.6), transparent);
+      }
+    </style>
+  </head>
+  <body class="bg-[#0f0b08] text-[#f5f1ea] overflow-x-hidden">
+
+    <!-- Background orbs -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+      <div class="orb absolute top-20 left-10 w-[500px] h-[500px] bg-[#d6c3a5]/5 blur-3xl rounded-full"></div>
+      <div class="orb-2 absolute bottom-40 right-10 w-[400px] h-[400px] bg-[#a89070]/5 blur-3xl rounded-full"></div>
+      <div class="orb absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-white/3 blur-3xl rounded-full"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 backdrop-blur-xl border-b border-white/10 bg-black/30">
+      <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+        <h1 class="text-lg tracking-[0.3em] uppercase font-semibold">
+          <span class="gradient-text">Portfolio</span>
+        </h1>
+        <nav class="hidden md:flex gap-10 text-sm text-white/60">
+          <a href="#top" class="hover:text-white transition nav-link">Top</a>
+          <a href="#about" class="hover:text-white transition nav-link">About</a>
+          <a href="#skills" class="hover:text-white transition nav-link">Skills</a>
+          <a href="#interests" class="hover:text-white transition nav-link">Interests</a>
+          <a href="#works" class="hover:text-white transition nav-link">Works</a>
+          <a href="#connect" class="hover:text-white transition nav-link">Contact</a>
+        </nav>
+        <!-- Hamburger -->
+        <button class="md:hidden hamburger flex flex-col gap-[5px] p-2" id="hamburgerBtn" onclick="toggleMenu()">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+      <!-- Mobile menu -->
+      <div id="mobileMenu" class="md:hidden bg-black/90 border-t border-white/10">
+        <nav class="flex flex-col px-6 py-4 gap-4 text-sm text-white/70">
+          <a href="#top" class="hover:text-white transition" onclick="toggleMenu()">Top</a>
+          <a href="#about" class="hover:text-white transition" onclick="toggleMenu()">About</a>
+          <a href="#skills" class="hover:text-white transition" onclick="toggleMenu()">Skills</a>
+          <a href="#interests" class="hover:text-white transition" onclick="toggleMenu()">Interests</a>
+          <a href="#works" class="hover:text-white transition" onclick="toggleMenu()">Works</a>
+          <a href="#connect" class="hover:text-white transition" onclick="toggleMenu()">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="top" class="relative min-h-screen flex items-center px-6">
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center w-full pt-32">
+        <div>
+          <p class="text-white/50 tracking-[0.4em] uppercase text-xs mb-6 reveal">
+            北九州市立大学 / 情報システム工学科
+          </p>
+          <h1 class="text-6xl md:text-8xl font-black leading-[0.95] tracking-tight mb-6 reveal">
+            <span class="gradient-text" id="typingText"></span>
+          </h1>
+          <p class="text-white/40 text-base tracking-wider mb-8 reveal">Yuto Fujii — 藤井勇士</p>
+          <p class="text-white/60 text-lg leading-9 max-w-xl mb-10 reveal">
+            福岡出身の大学3年生。情報システム工学を学びながら、旅・アニメ・うどんをこよなく愛する。
+            ものづくりで誰かの心を動かすことを目指しています。
+          </p>
+          <div class="flex flex-wrap gap-4 reveal">
+            <a href="#works" class="px-8 py-4 bg-white text-black font-semibold rounded-full hover:scale-105 transition text-sm">
+              制作物を見る
+            </a>
+            <a href="#connect" class="px-8 py-4 rounded-full border border-white/20 hover:bg-white/5 transition text-sm">
+              連絡する
+            </a>
+          </div>
+        </div>
+
+        <div class="relative reveal-right">
+          <div class="aspect-[4/5] rounded-[3rem] overflow-hidden border border-[#d6c3a5]/20 bg-gradient-to-br from-[#201814] to-[#0f0b08] shadow-[0_0_80px_rgba(214,195,165,0.15)]">
+            <img src="profile.jpg" alt="藤井勇士" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+          </div>
+          <!-- Floating badge -->
+          <div class="absolute -bottom-4 -left-4 bg-[#1a1410] border border-white/15 rounded-2xl px-5 py-3 backdrop-blur-xl">
+            <p class="text-xs text-white/50 mb-1">Nickname</p>
+            <p class="text-white font-black text-lg">ケーノ</p>
+          </div>
+          <div class="absolute -top-4 -right-4 bg-[#1a1410] border border-white/15 rounded-2xl px-5 py-3 backdrop-blur-xl">
+            <p class="text-xs text-white/50 mb-1">Based in</p>
+            <p class="text-white font-black text-lg">北九州</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30 text-xs tracking-widest">
+        <span>SCROLL</span>
+        <div class="w-px h-8 bg-gradient-to-b from-white/30 to-transparent"></div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="relative max-w-7xl mx-auto px-6 py-32">
+      <div class="grid lg:grid-cols-2 gap-20 items-start">
+        <div class="reveal-left">
+          <p class="text-white/40 uppercase tracking-[0.3em] text-xs mb-5">About Me</p>
+          <h2 class="text-5xl md:text-6xl font-black leading-tight mb-8">
+            自己紹介<br /><span class="text-white/20 text-3xl font-normal">Who I am</span>
+          </h2>
+          <!-- Timeline -->
+          <div class="space-y-6 border-l-2 border-white/10 pl-8 mt-10 relative">
+            <div class="timeline-item relative">
+              <div class="absolute -left-[2.6rem] top-1 w-3 h-3 rounded-full bg-[#d6c3a5] border-2 border-[#0f0b08]"></div>
+              <p class="text-white/40 text-xs tracking-widest mb-1">2005</p>
+              <p class="text-white/80">福岡県に生まれる</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[2.6rem] top-1 w-3 h-3 rounded-full bg-[#d6c3a5]/60 border-2 border-[#0f0b08]"></div>
+              <p class="text-white/40 text-xs tracking-widest mb-1">2024</p>
+              <p class="text-white/80">北九州市立大学 情報システム工学科 入学</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[2.6rem] top-1 w-3 h-3 rounded-full bg-[#d6c3a5]/40 border-2 border-[#0f0b08]"></div>
+              <p class="text-white/40 text-xs tracking-widest mb-1">現在</p>
+              <p class="text-white/80">プログラミング・Web制作を学習中</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-right">
+          <div class="space-y-6 text-white/60 text-lg leading-10">
+            <p>
+              <span class="text-[#d6c3a5] font-bold">2005年10月10日</span>生まれ、福岡県出身の大学生。
+              北九州市立大学 国際環境工学部 情報システム工学科3年生。
+            </p>
+            <p>
+              ニックネームの由来は「ふじさん」で登録しようとしたら先代が使用済みだったため、
+              <span class="text-white/80">ふじさん → 活火山 → アクティブボルケーノ → ケーノ</span>という経緯で生まれました。
+            </p>
+            <p>
+              日々プログラミングと向き合いながら、旅行やアニメ、うどんを通じて人生を満喫中。
+              技術で誰かの日常を少し豊かにできるものを作りたいと思っています。
+            </p>
+          </div>
+
+          <!-- Quick facts -->
+          <div class="grid grid-cols-2 gap-4 mt-10">
+            <div class="border border-white/10 rounded-2xl p-5 bg-white/[0.03]">
+              <p class="text-3xl font-black text-[#d6c3a5]">3</p>
+              <p class="text-white/50 text-sm mt-1">学年</p>
+            </div>
+            <div class="border border-white/10 rounded-2xl p-5 bg-white/[0.03]">
+              <p class="text-3xl font-black text-[#d6c3a5]">∞</p>
+              <p class="text-white/50 text-sm mt-1">うどんへの愛</p>
+            </div>
+            <div class="border border-white/10 rounded-2xl p-5 bg-white/[0.03]">
+              <p class="text-3xl font-black text-[#d6c3a5]">1</p>
+              <p class="text-white/50 text-sm mt-1">海外渡航（ロンドン）</p>
+            </div>
+            <div class="border border-white/10 rounded-2xl p-5 bg-white/[0.03]">
+              <p class="text-3xl font-black text-[#d6c3a5]">24h</p>
+              <p class="text-white/50 text-sm mt-1">アニメ視聴可能時間</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="relative max-w-7xl mx-auto px-6 py-32">
+      <div class="mb-16 reveal">
+        <p class="text-white/40 uppercase tracking-[0.3em] text-xs mb-4">My Skills</p>
+        <h2 class="text-5xl md:text-6xl font-black">スキル</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12">
+        <!-- Tech skills -->
+        <div class="reveal-left">
+          <h3 class="text-white/50 text-sm tracking-widest uppercase mb-8">プログラミング</h3>
+          <div class="space-y-6">
+            <div class="skill-item">
+              <div class="flex justify-between mb-2">
+                <span class="text-white/80 font-semibold">HTML / CSS</span>
+                <span class="text-white/40 text-sm">80%</span>
+              </div>
+              <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                <div class="skill-bar-fill h-full bg-gradient-to-r from-[#d6c3a5] to-[#a89070] rounded-full" data-width="80"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="flex justify-between mb-2">
+                <span class="text-white/80 font-semibold">JavaScript</span>
+                <span class="text-white/40 text-sm">60%</span>
+              </div>
+              <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                <div class="skill-bar-fill h-full bg-gradient-to-r from-[#d6c3a5] to-[#a89070] rounded-full" data-width="60"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="flex justify-between mb-2">
+                <span class="text-white/80 font-semibold">Python</span>
+                <span class="text-white/40 text-sm">55%</span>
+              </div>
+              <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                <div class="skill-bar-fill h-full bg-gradient-to-r from-[#d6c3a5] to-[#a89070] rounded-full" data-width="55"></div>
+              </div>
+            </div>
+            <div class="skill-item">
+              <div class="flex justify-between mb-2">
+                <span class="text-white/80 font-semibold">C言語</span>
+                <span class="text-white/40 text-sm">40%</span>
+              </div>
+              <div class="h-1 bg-white/10 rounded-full overflow-hidden">
+                <div class="skill-bar-fill h-full bg-gradient-to-r from-[#d6c3a5] to-[#a89070] rounded-full" data-width="40"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tool skills -->
+        <div class="reveal-right">
+          <h3 class="text-white/50 text-sm tracking-widest uppercase mb-8">ツール・その他</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="border border-white/10 rounded-2xl p-5 bg-white/[0.03] hover:border-white/20 transition">
+              <p class="text-2xl mb-3">🎨</p>
+              <p class="font-semibold text-white/90">Tailwind CSS</p>
+              <p class="text-white/40 text-xs mt-1">スタイリング</p>
+            </div>
+            <div class="border border-white/10 rounded-2xl p-5 bg-white/[0.03] hover:border-white/20 transition">
+              <p class="text-2xl mb-3">⚛️</p>
+              <p class="font-semibold text-white/90">Next.js</p>
+              <p class="text-white/40 text-xs mt-1">学習中</p>
+            </div>
+            <div class="border border-white/10 rounded-2xl p-5 bg-white/[0.03] hover:border-white/20 transition">
+              <p class="text-2xl mb-3">🐙</p>
+              <p class="font-semibold text-white/90">Git / GitHub</p>
+              <p class="text-white/40 text-xs mt-1">バージョン管理</p>
+            </div>
+            <div class="border border-white/10 rounded-2xl p-5 bg-white/[0.03] hover:border-white/20 transition">
+              <p class="text-2xl mb-3">🎬</p>
+              <p class="font-semibold text-white/90">Premiere Pro</p>
+              <p class="text-white/40 text-xs mt-1">動画編集</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interests Section -->
+    <section id="interests" class="relative max-w-7xl mx-auto px-6 py-32">
+      <div class="mb-16 reveal">
+        <p class="text-white/40 uppercase tracking-[0.3em] text-xs mb-4">My Interests</p>
+        <h2 class="text-5xl md:text-6xl font-black">好きなこと</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="border border-white/10 rounded-3xl overflow-hidden bg-white/[0.03] hobby-card reveal" onclick="showDetailModal('travel')">
+          <img src="harrods.jpg" alt="旅行" class="card-img" />
+          <div class="p-6">
+            <p class="text-[#d6c3a5] text-xs tracking-widest uppercase mb-2">✈ Travel</p>
+            <h3 class="text-3xl font-black mb-2">旅行</h3>
+            <p class="text-white/50 text-sm leading-6 mb-3">大阪・京都・ロンドンへの旅。食と建築を求めて。</p>
+            <p class="text-[#d6c3a5] text-xs tracking-widest">クリックで詳細 →</p>
+          </div>
+        </div>
+
+        <div class="border border-white/10 rounded-3xl overflow-hidden bg-white/[0.03] hobby-card reveal" style="transition-delay: 0.1s" onclick="showDetailModal('anime')">
+          <img src="jojo.jpg" alt="アニメ" class="card-img" />
+          <div class="p-6">
+            <p class="text-[#d6c3a5] text-xs tracking-widest uppercase mb-2">🎌 Anime</p>
+            <h3 class="text-3xl font-black mb-2">アニメ</h3>
+            <p class="text-white/50 text-sm leading-6 mb-3">ジョジョの奇妙な冒険とドクターストーンが特に好き。</p>
+            <p class="text-[#d6c3a5] text-xs tracking-widest">クリックで詳細 →</p>
+          </div>
+        </div>
+
+        <div class="border border-white/10 rounded-3xl overflow-hidden bg-white/[0.03] hobby-card reveal" style="transition-delay: 0.2s" onclick="showDetailModal('food')">
+          <img src="udonn.jpg" alt="食べること" class="card-img" />
+          <div class="p-6">
+            <p class="text-[#d6c3a5] text-xs tracking-widest uppercase mb-2">🍜 Food</p>
+            <h3 class="text-3xl font-black mb-2">食べること</h3>
+            <p class="text-white/50 text-sm leading-6 mb-3">うどんはこの世の最高傑作。ごぼう天うどん最高。</p>
+            <p class="text-[#d6c3a5] text-xs tracking-widest">クリックで詳細 →</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Works Section -->
+    <section id="works" class="relative max-w-7xl mx-auto px-6 py-32">
+      <div class="mb-16 reveal">
+        <p class="text-white/40 uppercase tracking-[0.3em] text-xs mb-4">My Works</p>
+        <h2 class="text-5xl md:text-6xl font-black">制作物</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="work-card border border-white/10 rounded-3xl p-8 bg-white/[0.03] reveal">
+          <div class="w-12 h-12 rounded-2xl bg-[#d6c3a5]/10 flex items-center justify-center text-2xl mb-6">🌐</div>
+          <p class="text-white/40 text-xs tracking-widest uppercase mb-2">Web</p>
+          <h3 class="text-2xl font-black mb-3">自己紹介サイト</h3>
+          <p class="text-white/50 text-sm leading-7">HTML・CSS・Tailwind CSSで制作したポートフォリオサイト。ダークトーンと和の雰囲気を意識したデザイン。</p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">HTML</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">Tailwind</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">JavaScript</span>
+          </div>
+        </div>
+
+        <div class="work-card border border-white/10 rounded-3xl p-8 bg-white/[0.03] reveal" style="transition-delay: 0.1s">
+          <div class="w-12 h-12 rounded-2xl bg-[#d6c3a5]/10 flex items-center justify-center text-2xl mb-6">💪</div>
+          <p class="text-white/40 text-xs tracking-widest uppercase mb-2">Web App</p>
+          <h3 class="text-2xl font-black mb-3">My Workout</h3>
+          <p class="text-white/50 text-sm leading-7">Next.jsで制作したワークアウト管理アプリ。トレーニングの記録・管理ができるWebアプリ。</p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">Next.js</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">React</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">Vercel</span>
+          </div>
+          <a href="https://my-workout-liart.vercel.app/" target="_blank" rel="noopener noreferrer"
+            class="mt-6 inline-flex items-center gap-2 text-sm text-[#d6c3a5] hover:text-white transition">
+            サイトを見る →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="connect" class="max-w-5xl mx-auto px-6 py-32">
+      <div class="relative overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.03] backdrop-blur-2xl p-12 md:p-20 text-center shadow-2xl reveal">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#d6c3a5]/5 to-transparent pointer-events-none"></div>
+
+        <p class="text-white/40 uppercase tracking-[0.3em] text-xs mb-6 relative z-10">Contact</p>
+
+        <h2 class="text-5xl md:text-7xl font-black leading-tight mb-4 relative z-10">
+          皆さんとたくさん<br>つながりたいです。
+        </h2>
+        <p class="text-white/40 mb-10 relative z-10">気軽に話しかけてください！</p>
+
+        <div class="flex flex-wrap justify-center gap-5 relative z-10">
+          <a
+            href="https://instagram.com/yu_to.1010"
+            class="flex items-center gap-3 px-8 py-4 rounded-full border border-white/15 hover:bg-white/10 hover:border-white/30 transition"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-white/70"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            Instagram
+          </a>
+          <a
+            href="https://github.com/Tesonn-1010"
+            class="flex items-center gap-3 px-8 py-4 rounded-full border border-white/15 hover:bg-white/10 hover:border-white/30 transition"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" class="text-white/70"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-10 px-6">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-white/30 text-sm">
+        <p>© 2026 Yuto Fujii — ケーノ</p>
+        <div class="flex gap-8">
+          <a href="#top" class="hover:text-white/60 transition">Top</a>
+          <a href="#about" class="hover:text-white/60 transition">About</a>
+          <a href="#works" class="hover:text-white/60 transition">Works</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Travel Modal -->
+    <div id="travelModal" class="modal-hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 items-center justify-center p-6" onclick="closeDetailModal(event)">
+      <div class="bg-[#1a1410] border border-white/10 rounded-[3rem] overflow-hidden max-w-2xl w-full" onclick="event.stopPropagation()">
+        <div class="h-64 overflow-hidden relative">
+          <img src="harrods.jpg" alt="旅行" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#1a1410] via-transparent to-transparent"></div>
+        </div>
+        <div class="p-8 md:p-12">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-4xl font-black">✈ 旅行</h2>
+            <button onclick="closeDetailModal()" class="text-white/50 hover:text-white w-10 h-10 rounded-full border border-white/10 flex items-center justify-center transition hover:border-white/30">✕</button>
+          </div>
+          <p class="text-white/60 leading-8 mb-6">
+            大阪や京都によく行きます。おいしい食べ物を食べたり、歴史的な建築物を見たりするのが好きです。
+            海外は一度だけロンドンに行きました。ハロッズのデパートや街並みがとても印象的で、
+            ご飯もおいしかったし、建築も素晴らしかったです。また海外に行きたい！
+          </p>
+          <div class="flex flex-wrap gap-2 mb-8">
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">🇯🇵 大阪</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">🏯 京都</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">🇬🇧 ロンドン</span>
+          </div>
+          <button onclick="closeDetailModal()" class="w-full px-6 py-3 bg-white text-black font-semibold rounded-full hover:scale-105 transition">閉じる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Anime Modal -->
+    <div id="animeModal" class="modal-hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 items-center justify-center p-6" onclick="closeDetailModal(event)">
+      <div class="bg-[#1a1410] border border-white/10 rounded-[3rem] overflow-hidden max-w-2xl w-full" onclick="event.stopPropagation()">
+        <div class="h-64 overflow-hidden relative">
+          <img src="jojo.jpg" alt="アニメ" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#1a1410] via-transparent to-transparent"></div>
+        </div>
+        <div class="p-8 md:p-12">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-4xl font-black">🎌 アニメ</h2>
+            <button onclick="closeDetailModal()" class="text-white/50 hover:text-white w-10 h-10 rounded-full border border-white/10 flex items-center justify-center transition hover:border-white/30">✕</button>
+          </div>
+          <p class="text-white/60 leading-8 mb-6">
+            アニメは特に<span class="text-white/90 font-bold">ジョジョの奇妙な冒険</span>と<span class="text-white/90 font-bold">ドクターストーン</span>が好きです。
+            どちらも独特の世界観と魅力的なキャラクターが特徴で、ストーリーも非常に引き込まれます。
+            ジョジョはスタイリッシュなアートと独創的な能力バトルが魅力。
+            ドクターストーンは科学をテーマにした斬新なストーリーが面白い！
+          </p>
+          <div class="flex flex-wrap gap-2 mb-8">
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">ジョジョの奇妙な冒険</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">ドクターストーン</span>
+          </div>
+          <button onclick="closeDetailModal()" class="w-full px-6 py-3 bg-white text-black font-semibold rounded-full hover:scale-105 transition">閉じる</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food Modal -->
+    <div id="foodModal" class="modal-hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 items-center justify-center p-6" onclick="closeDetailModal(event)">
+      <div class="bg-[#1a1410] border border-white/10 rounded-[3rem] overflow-hidden max-w-2xl w-full" onclick="event.stopPropagation()">
+        <div class="h-64 overflow-hidden relative">
+          <img src="udonn.jpg" alt="食べること" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#1a1410] via-transparent to-transparent"></div>
+        </div>
+        <div class="p-8 md:p-12">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-4xl font-black">🍜 食べること</h2>
+            <button onclick="closeDetailModal()" class="text-white/50 hover:text-white w-10 h-10 rounded-full border border-white/10 flex items-center justify-center transition hover:border-white/30">✕</button>
+          </div>
+          <p class="text-white/60 leading-8 mb-6">
+            <span class="text-white/90 font-bold">うどん</span>がこの世の中で一番好きな食べ物です。
+            うどんのシンプルな美味しさと、出汁の深い味わいが大好きです。
+            特に、福岡の<span class="text-white/90 font-bold">ごぼう天うどん</span>や、香川の<span class="text-white/90 font-bold">讃岐うどん</span>が好きで、
+            食べるたびに幸せな気持ちになります。麺のコシと出汁の風味をじっくり味わうのが至福の時間。
+          </p>
+          <div class="flex flex-wrap gap-2 mb-8">
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">ごぼう天うどん</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">讃岐うどん</span>
+            <span class="text-xs px-3 py-1 rounded-full border border-white/10 text-white/50">出汁命</span>
+          </div>
+          <button onclick="closeDetailModal()" class="w-full px-6 py-3 bg-white text-black font-semibold rounded-full hover:scale-105 transition">閉じる</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ===== Typing Animation =====
+      const text = 'ケーノ';
+      let i = 0;
+      const el = document.getElementById('typingText');
+      el.classList.add('typing-cursor');
+
+      function type() {
+        if (i <= text.length) {
+          el.textContent = text.slice(0, i);
+          i++;
+          setTimeout(type, 180);
+        } else {
+          setTimeout(() => el.classList.remove('typing-cursor'), 1000);
+        }
+      }
+      setTimeout(type, 600);
+
+      // ===== Scroll Reveal =====
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // Skill bars
+            entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+              bar.style.width = bar.dataset.width + '%';
+            });
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+        observer.observe(el);
+      });
+
+      // Also observe skill section directly
+      const skillObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+              bar.style.width = bar.dataset.width + '%';
+            });
+          }
+        });
+      }, { threshold: 0.2 });
+      document.querySelectorAll('#skills').forEach(el => skillObserver.observe(el));
+
+      // ===== Active Nav =====
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-link');
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          if (window.scrollY >= section.offsetTop - 150) {
+            current = section.getAttribute('id');
+          }
+        });
+        navLinks.forEach(link => {
+          link.classList.remove('active', 'text-white');
+          link.classList.add('text-white/60');
+          if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active', 'text-white');
+            link.classList.remove('text-white/60');
+          }
+        });
+      });
+
+      // ===== Hamburger Menu =====
+      function toggleMenu() {
+        const btn = document.getElementById('hamburgerBtn');
+        const menu = document.getElementById('mobileMenu');
+        btn.classList.toggle('open');
+        menu.classList.toggle('open');
+      }
+
+      // ===== Modals =====
+      function showDetailModal(type) {
+        const map = { travel: 'travelModal', anime: 'animeModal', food: 'foodModal' };
+        const modal = document.getElementById(map[type]);
+        modal.classList.remove('modal-hidden');
+        modal.classList.add('modal-visible');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeDetailModal(event) {
+        const ids = ['travelModal', 'animeModal', 'foodModal'];
+        if (event && !ids.includes(event.target.id)) return;
+        ids.forEach(id => {
+          document.getElementById(id).classList.add('modal-hidden');
+          document.getElementById(id).classList.remove('modal-visible');
+        });
+        document.body.style.overflow = 'auto';
+      }
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeDetailModal();
+      });
+    </script>
+  </body>
+</html>
